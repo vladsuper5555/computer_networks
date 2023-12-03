@@ -12,6 +12,8 @@
 
 int main(int argc, char *argv[]) {
     char result[10000];
+    for (int i = 0; i < 10000; ++i)
+        result[i] = '\0';
     // check the args first time
     returnFilesContent(argv[1], result);
 
