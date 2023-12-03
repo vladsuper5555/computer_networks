@@ -11,12 +11,11 @@
 
 
 int main(int argc, char *argv[]) {
-    char result[100000];
+    char result[10000];
     // check the args first time
     returnFilesContent(argv[1], result);
 
     const char *root = "root";
     printf("%s\n", result);
-    mkdir(root, 0700);
     return 0;
 }
