@@ -80,6 +80,7 @@ void returnFilesContent(char *url, char *result) {
 
     while (1) {
         int byte_count = recv(sockfd, buf, sizeof buf, 0);
+        printf("bitcount is : %d", byte_count);
         if (byte_count <= 0) {
             break;
         }
