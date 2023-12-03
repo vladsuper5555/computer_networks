@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 int main () {
-    std::cout << "merge\n";
+    printf("this is workiong yey\n");
 }
