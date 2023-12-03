@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
 
     char buf[2056];
     char url[2056];
-    strcpy(url, argv[0]); // Using argv[1] as argv[0] is the program name
+    strcpy(url, argv[1]); // Using argv[1] as argv[0] is the program name
     printf("the url given is %s\n", url);
     int byte_count;
 
