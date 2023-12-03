@@ -83,14 +83,15 @@ int main(int argc, char *argv[]) {
     sprintf(header, "GET %s HTTP/1.1\r\nHost: %s\r\n\r\n", path, domain);
     send(sockfd, header, strlen(header), 0);
     printf("GET Sent...\n");
+    while(true)
+    {
+        int byte_count = recv(sockfd, buf, sizeof buf, 0);
+        printf("recv()'d %d bytes of data in buf\n", byte_count);
+        printf("%s", buf);
 
-    int byte_count = recv(sockfd, buf, sizeof buf, 0);
-    printf("recv()'d %d bytes of data in buf\n", byte_count);
-    printf("%s", buf);
-
-    // Close the socket
-    close(sockfd);
-    freeaddrinfo(res);
-
+        // Close the socket
+        close(sockfd);
+        freeaddrinfo(res);
+    }
     return 0;
 }
