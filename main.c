@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <string.h>
 #include "./webcontent.h"
+#include <stdio.h>
+#include <sys/stat.h>
 
 
 int main(int argc, char *argv[]) {
@@ -13,6 +15,8 @@ int main(int argc, char *argv[]) {
     // check the args first time
     returnFilesContent(argv[1], result);
 
+    const char *root = "root";
     printf("%s\n", result);
+    mkdir(root, 0700);
     return 0;
 }

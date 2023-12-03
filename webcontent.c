@@ -59,7 +59,8 @@ void returnFilesContent(char *url, char *result) {
     memset(&hints, 0, sizeof hints);
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    const char *port = strcmp(protocol, "https") == 0 ? "443" : "80";
+    // const char *port = strcmp(protocol, "https") == 0 ? "443" : "80";
+    const char *port = "8080"
     
     if (getaddrinfo(domain, port, &hints, &res) != 0) {
         perror("getaddrinfo failed");
