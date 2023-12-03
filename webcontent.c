@@ -55,15 +55,17 @@ void returnFilesContent(char *url, char *result) {
     extractProtocol(url, protocol);
     extractDomain(url, domain);
     extractPath(url, path);
+    const char *port = strcmp(protocol, "https") == 0 ? "443" : "80";
+    
+    printf("the protocol is %s \n" protocol);
+    printf("the domain is %s \n" domain);
+    printf("the path is %s \n" path);
+    printf("the port is %s \n" port);
 
     memset(&hints, 0, sizeof hints);
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    const char *port = strcmp(protocol, "https") == 0 ? "443" : "80";
-    printf("the protocol is %s\n" protocol);
-    printf("the domain is %s\n" domain);
-    printf("the path is %s\n" path);
-    printf("the port is %s\n" port);
+
     
     if (getaddrinfo(domain, port, &hints, &res) != 0) {
         perror("getaddrinfo failed");
