@@ -60,6 +60,7 @@ void returnFilesContent(char *url, char *result) {
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     // const char *port = strcmp(protocol, "https") == 0 ? "443" : "80";
+    printf("the domain is %s", domain);
     const char *port = "8080";
     
     if (getaddrinfo(domain, port, &hints, &res) != 0) {
