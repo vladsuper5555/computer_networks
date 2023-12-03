@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
     {
         int byte_count = recv(sockfd, buf, sizeof buf, 0);
         printf("recv()'d %d bytes of data in buf\n", byte_count);
-        printf("%s", buf);
+        // printf("%s", buf);
         if (byte_count <= 0)
             break;
 
