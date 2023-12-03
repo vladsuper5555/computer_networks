@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
     printf("Connected!\n");
 
     char header[5128];
-    sprintf(header, "GET %s \r\nHost: %s\r\n\r\n", path, domain);
+    sprintf(header, "GET %s \r\nHost: %s\r\n\r\n", path, domain); // removed HTTP/1.1 after the first %s
     send(sockfd, header, strlen(header), 0);
     printf("GET Sent...\n");
     while(true)
