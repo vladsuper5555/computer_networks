@@ -10,6 +10,29 @@ void extractProtocol(char *url, char *protocol) {
     }
 }
 
+void extractPort(char *url, char *port, const char *defaultPort) {
+    char *start = strstr(url, "://");
+    if (start == NULL) {
+        start = url;
+    } else {
+        start += 3;
+    }
+
+    char *portStart = strchr(start, ':');
+    if (portStart == NULL) {
+        strcpy(port, defaultPort);
+    } else {
+        portStart++;
+        char *portEnd = strchr(portStart, '/');
+        if (portEnd == NULL) {
+            strcpy(port, portStart);
+        } else {
+            strncpy(port, portStart, portEnd - portStart);
+            port[portEnd - portStart] = '\0';
+        }
+    }
+}
+
 void extractDomain(char *url, char *domain) {
     char *start = strstr(url, "://");
     if (start == NULL) {
@@ -19,6 +42,10 @@ void extractDomain(char *url, char *domain) {
     }
 
     char *end = strchr(start, '/');
+    char *colon = strchr(start, ':');
+    if (colon && (colon < end || end == NULL)) {
+        end = colon;
+    }
     if (end == NULL) {
         strcpy(domain, start);
     } else {
@@ -26,6 +53,7 @@ void extractDomain(char *url, char *domain) {
         domain[end - start] = '\0';
     }
 }
+
 
 void extractPath(char *url, char *path) {
     char *start = strstr(url, "://");
@@ -55,13 +83,14 @@ void returnFilesContent(char *url, char *result) {
     extractProtocol(url, protocol);
     extractDomain(url, domain);
     extractPath(url, path);
+    extractPort(url, port, strcmp(protocol, "https") == 0 ? "443" : "80");
+
 
     memset(&hints, 0, sizeof hints);
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     // const char *port = strcmp(protocol, "https") == 0 ? "443" : "80";
     printf("the domain is %s", domain);
-    const char *port = "8080";
     
     if (getaddrinfo(domain, port, &hints, &res) != 0) {
         perror("getaddrinfo failed");
