@@ -10,6 +10,6 @@
 #include <string.h>
 
 // Function to extract content from a given HTTP URL
-void returnFilesContent(const char *url, char *result);
+void returnFilesContent(char *url, char *result);
 
 #endif
