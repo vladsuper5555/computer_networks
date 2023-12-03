@@ -1,8 +1,48 @@
 #include "webcontent.h"
 
-void extractProtocol(const char *url, char *protocol);
-void extractDomain(const char *url, char *domain);
-void extractPath(const char *url, char *path);
+void extractProtocol(char *url, char *protocol) {
+    char *protoEnd = strstr(url, "://");
+    if (protoEnd == NULL) {
+        strcpy(protocol, "http"); // Default to HTTP if no protocol specified
+    } else {
+        strncpy(protocol, url, protoEnd - url);
+        protocol[protoEnd - url] = '\0';
+    }
+}
+
+void extractDomain(char *url, char *domain) {
+    char *start = strstr(url, "://");
+    if (start == NULL) {
+        start = url;
+    } else {
+        start += 3;
+    }
+
+    char *end = strchr(start, '/');
+    if (end == NULL) {
+        strcpy(domain, start);
+    } else {
+        strncpy(domain, start, end - start);
+        domain[end - start] = '\0';
+    }
+}
+
+void extractPath(char *url, char *path) {
+    char *start = strstr(url, "://");
+    if (start == NULL) {
+        start = url;
+    } else {
+        start += 3;
+    }
+
+    char *pathStart = strchr(start, '/');
+    if (pathStart == NULL) {
+        strcpy(path, "/");
+    } else {
+        strcpy(path, pathStart);
+    }
+}
+
 
 void returnFilesContent(const char *url, char *result) {
     struct addrinfo hints, *res;
@@ -48,47 +88,4 @@ void returnFilesContent(const char *url, char *result) {
 
     close(sockfd);
     freeaddrinfo(res);
-}
-
-void extractProtocol(char *url, char *protocol) {
-    char *protoEnd = strstr(url, "://");
-    if (protoEnd == NULL) {
-        strcpy(protocol, "http"); // Default to HTTP if no protocol specified
-    } else {
-        strncpy(protocol, url, protoEnd - url);
-        protocol[protoEnd - url] = '\0';
-    }
-}
-
-void extractDomain(char *url, char *domain) {
-    char *start = strstr(url, "://");
-    if (start == NULL) {
-        start = url;
-    } else {
-        start += 3;
-    }
-
-    char *end = strchr(start, '/');
-    if (end == NULL) {
-        strcpy(domain, start);
-    } else {
-        strncpy(domain, start, end - start);
-        domain[end - start] = '\0';
-    }
-}
-
-void extractPath(char *url, char *path) {
-    char *start = strstr(url, "://");
-    if (start == NULL) {
-        start = url;
-    } else {
-        start += 3;
-    }
-
-    char *pathStart = strchr(start, '/');
-    if (pathStart == NULL) {
-        strcpy(path, "/");
-    } else {
-        strcpy(path, pathStart);
-    }
 }
