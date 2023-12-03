@@ -44,7 +44,7 @@ void extractPath(char *url, char *path) {
 }
 
 
-void returnFilesContent(const char *url, char *result) {
+void returnFilesContent(char *url, char *result) {
     struct addrinfo hints, *res;
     int sockfd;
     char buf[10056];
