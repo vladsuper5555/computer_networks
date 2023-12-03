@@ -80,7 +80,7 @@ void returnFilesContent(char *url, char *result) {
     char domain[2056];
     char path[2056];
     char port[10];
-    
+
     extractProtocol(url, protocol);
     extractDomain(url, domain);
     extractPath(url, path);
@@ -91,7 +91,10 @@ void returnFilesContent(char *url, char *result) {
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     // const char *port = strcmp(protocol, "https") == 0 ? "443" : "80";
-    printf("the domain is %s", domain);
+    printf("the domain is %s\n", domain);
+    printf("the path is %s\n", path);
+    printf("the port is %s\n", port);
+    printf("the protocol is %s\n", protocol);
     
     if (getaddrinfo(domain, port, &hints, &res) != 0) {
         perror("getaddrinfo failed");
