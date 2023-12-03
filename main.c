@@ -19,6 +19,6 @@ int main(int argc, char *argv[]) {
 
     const char *root = "root";
     printf("the final lenfth is %d \n", strlen(result));
-    // printf("%s\n", result);
+    printf("%s\n", result);
     return 0;
 }
