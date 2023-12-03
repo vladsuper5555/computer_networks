@@ -110,7 +110,7 @@ void returnFilesContent(char *url, char *result) {
     }
 
     char header[5128];
-    sprintf(header, "GET %s \r\n\r\n", path);
+    sprintf(header, "GET %s \r\nHost: %s\r\n\r\n", path, domain);
     send(sockfd, header, strlen(header), 0);
 
     while (1) {
