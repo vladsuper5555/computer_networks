@@ -65,7 +65,7 @@ void extractPath(char *url, char *path) {
 
     char *pathStart = strchr(start, '/');
     if (pathStart == NULL) {
-        strcpy(path, "/");
+        strcpy(path, "");
     } else {
         strcpy(path, pathStart);
     }
