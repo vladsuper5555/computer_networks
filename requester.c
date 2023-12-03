@@ -12,8 +12,8 @@ int main(int argc,char *argv[])
 {
     /* first what are we going to send and where are we going to send it? */
     int portno =        80;
-    char *host =        "profs.info.uaic.ro";
-    char *message_fmt = "  GET /~olariu HTTP/1.0\r\n\r\n";
+    const char *host =        "profs.info.uaic.ro";
+    const char *message_fmt = "  GET /~olariu HTTP/1.0\r\n\r\n";
 
     struct hostent *server;
     struct sockaddr_in serv_addr;
