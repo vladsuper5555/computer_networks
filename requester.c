@@ -20,10 +20,9 @@ int main(int argc,char *argv[])
     int sockfd, bytes, sent, received, total;
     char message[1024],response[4096];
 
-    if (argc < 3) { puts("Parameters: <apikey> <command>"); exit(0); }
 
     /* fill in the parameters */
-    sprintf(message,message_fmt,argv[1],argv[2]);
+    // sprintf(message,message_fmt,argv[1],argv[2]);
     printf("Request:\n%s\n",message);
 
     /* create the socket */
