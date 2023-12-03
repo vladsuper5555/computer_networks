@@ -1,8 +1,8 @@
 #include "webcontent.h"
 
-static void extractProtocol(const char *url, char *protocol);
-static void extractDomain(const char *url, char *domain);
-static void extractPath(const char *url, char *path);
+void extractProtocol(const char *url, char *protocol);
+void extractDomain(const char *url, char *domain);
+void extractPath(const char *url, char *path);
 
 void returnFilesContent(const char *url, char *result) {
     struct addrinfo hints, *res;
