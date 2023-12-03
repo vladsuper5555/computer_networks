@@ -79,7 +79,8 @@ void returnFilesContent(char *url, char *result) {
     char protocol[10];
     char domain[2056];
     char path[2056];
-
+    char port[10];
+    
     extractProtocol(url, protocol);
     extractDomain(url, domain);
     extractPath(url, path);
