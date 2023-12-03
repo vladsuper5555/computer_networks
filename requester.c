@@ -46,13 +46,14 @@ int main(int argc, char *argv[]) {
     char buf[2056];
     char url[2056];
     strcpy(url, argv[0]); // Using argv[1] as argv[0] is the program name
+    printf("the url given is %s\n", url);
     int byte_count;
 
     char domain[2056];
     char path[2056];
     extractDomain(url, domain);
     extractPath(url, path);
-
+    printf("%s %s \n", path, domain);
     memset(&hints, 0, sizeof hints);
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
@@ -62,7 +63,7 @@ int main(int argc, char *argv[]) {
     connect(sockfd, res->ai_addr, res->ai_addrlen);
     printf("Connected!\n");
 
-    char header[2056];
+    char header[5128];
     sprintf(header, "GET %s HTTP/1.1\r\nHost: %s\r\n\r\n", path, domain);
     send(sockfd, header, strlen(header), 0);
     printf("GET Sent...\n");
