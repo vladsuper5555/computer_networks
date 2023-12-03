@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
     struct addrinfo hints, *res;
     int sockfd;
 
-    char buf[2056];
+    char buf[10056];
     char url[2056];
     char protocol[10];
     strcpy(url, argv[1]);
