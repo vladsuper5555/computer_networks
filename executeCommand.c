@@ -1,4 +1,5 @@
 #include "executeCommand.h"
+#include <sys/wait.h>  // Include header for waitpid
 
 void executeCommand(char *argv0, char *command) {
     char array[20][100];
@@ -17,11 +18,22 @@ void executeCommand(char *argv0, char *command) {
         p = strtok(NULL, " ");
     }
     queryArray[count] = NULL;
+    
     int pid = fork();
     if (pid == 0) {
-        // we are on the child so lets run the command
-        execvp(argv0, queryArray); // this should now run our command
+        // Child process
+        execvp(argv0, queryArray); // Run the command
+        exit(EXIT_FAILURE);  // If execvp returns, there was an error
     }
-    else
-        return;
+    else if (pid > 0) {
+        // Parent process
+        int status;
+        waitpid(pid, &status, 0);  // Wait for the child process to finish
+    }
+    else {
+        // Fork failed
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
 }
+    
