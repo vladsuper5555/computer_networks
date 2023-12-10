@@ -55,9 +55,9 @@ void fileFetcher(struct enod* ENOD) {
     parseURL(ENOD->url, host, path, &port);
     printf("domain : %s path : %s port : %d \n", host, path, port);
     while (1) {
-        sprintf(buffer, "GET %s HTTP/1.1\r\nHost: %s:%d\r\n\r\n", path, host, port);
+        sprintf(buffer, "GET /%s HTTP/1.1\r\nHost: %s:%d\r\n\r\n", path, host, port);
         // fgets(buffer, BUFFER_SIZE, stdin);
-        printf("the buffer is %s\n", buffer);
+        // printf("the buffer is %s\n", buffer);
         // Sending a message to the server
         send(sock, buffer, strlen(buffer), 0);
         memset(buffer, 0, BUFFER_SIZE); // Clear the buffer
@@ -67,7 +67,16 @@ void fileFetcher(struct enod* ENOD) {
             printf("Server closed the connection\n");
             break;
         }
-        printf("Server response: %s\n", buffer);
+        // printf("Server response: %s\n", buffer);
+        if (strlen(buffer) == 0)
+            break;
+        strcpy(ENOD->fileContent, buffer);
+        // need to change the way we check if it is ok not a folder
+        // probably y adding something in the response
+        if (strstr(buffer, ". - 0") != NULL) //  means it is a foldere;
+            ENOD->isFile = 0;
+        else
+            ENOD->isFile = 1;
     }
 
     // Close the socket

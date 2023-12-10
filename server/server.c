@@ -108,6 +108,7 @@ void build_http_response(const char *file_name,
              mime_type);
 
     // if file not exist, response is 404 Not Found
+    printf("the name of the file we try and open is %s", file_name);
     int file_fd = open(file_name, O_RDONLY);
     if (file_fd == -1) {
         snprintf(response, BUFFER_SIZE,
@@ -187,21 +188,23 @@ void *handle_client(void *arg) {
 
     // receive request data from client and store into buffer
     ssize_t bytes_received = recv(client_fd, buffer, BUFFER_SIZE, 0);
-    printf("%s the content received\n", buffer);
-    if (bytes_received > 0) {
+    printf("the number of bytes is %d \n and the string is \n %s \n", bytes_received, buffer);
+    if (bytes_received > 0)
+    {
         // check if request is GET
         regex_t regex;
-        regcomp(&regex, "^GET /([^ ]*) HTTP/1", REG_EXTENDED);
+        regcomp(&regex, "^GET /([^ ]*) HTTP/1.1", REG_EXTENDED);
         regmatch_t matches[2];
 
-        if (regexec(&regex, buffer, 2, matches, 0) == 0) {
+        if (regexec(&regex, buffer, 2, matches, 0) == 0 || true) {
             // extract filename from request and decode URL
             buffer[matches[1].rm_eo] = '\0';
             const char *url_encoded_file_name = buffer + matches[1].rm_so;
             char *file_name = url_decode(url_encoded_file_name);
-
+            printf("the name of the file first read is %s", file_name);
             // Determine if the request is local or remote
             if (is_remote_request(file_name)) {
+                printf("we received a request for a remote file\n");
                 char remote_content[100001];
                 returnFilesContent(file_name, remote_content);
 
@@ -209,12 +212,14 @@ void *handle_client(void *arg) {
                 send(client_fd, remote_content, strlen(remote_content), 0);
                 // free(remote_content);
             } else if (is_directory_request(file_name)) {
+                printf("we received a request for a directory\n");
                 char *directory_listing = list_directory_contents(file_name);
 
                 // send directory_listing as response
                 send(client_fd, directory_listing, strlen(directory_listing), 0);
                 free(directory_listing);
             } else {
+                printf("we received a request for a local file\n");
                 // handle local file request
                 char *response = (char *)malloc(BUFFER_SIZE * 2 * sizeof(char));
                 size_t response_len;
@@ -222,6 +227,7 @@ void *handle_client(void *arg) {
                 send(client_fd, response, response_len, 0);
                 free(response);
             }
+            printf("done responding\n");
 
             free(file_name);
         }
