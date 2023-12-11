@@ -24,50 +24,7 @@ int isEnodAFolder (struct enod* e) {
 int isEnodAHTMLFile (struct enod* e) {
     return 0;
 }
-/*
-void downloadFiles(Link link, int maxDepth) {
-    if (link.depth > maxDepth) {
-        createFoldersForUrl(link.url);
-        return;
-    }
 
-    char* htmlContent = downloadHtmlContent(link.url);
-    Link* links = parseHtmlForLinks(htmlContent, link.depth);
-
-    // Iterate over extracted links and call downloadFiles recursively
-    for (int i = 0; i < number of links ; i++) {
-    //     downloadFiles(links[i], maxDepth);
-    // }
-
-    // // Free resources
-    // free(htmlContent);
-    // free(links);
-// }
-
-void createFoldersForUrl(const char* url, int maxDepth) {
-    char* urlCopy = strdup(url); // Duplicate the URL as strtok modifies the string
-    const char* delim = "/";     // Delimiter for splitting the URL
-
-    // Tokenize the URL to extract path components
-    char* token = strtok(urlCopy, delim);
-    char path[1024] = {0}; // Buffer to hold the constructed path
-    int depth = 0;
-
-    while (token != NULL && depth < maxDepth) {
-        strcat(path, token);
-        strcat(path, "/");
-
-        // Create directory if it doesn't exist
-        mkdir(path, 0777); // You might need to adjust permissions
-
-        token = strtok(NULL, delim);
-        depth++;
-    }
-
-    free(urlCopy); // Free the duplicated URL
-}
-*/
-// maybe we need a different socket for error
 int isFileNotFound(struct enod* ENOD) 
 {
     if (strstr(ENOD->fileContent, "HTTP/1.1 404 Not Found") != NULL)

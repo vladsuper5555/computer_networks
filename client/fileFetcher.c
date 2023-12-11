@@ -79,15 +79,7 @@ void fileFetcher(struct enod* ENOD) {
             ENOD->isFile = 1;
     }
 
-    // Close the socket
     close(sock);
 
-    // return 0;
     return;
 }
-
-// fere we have to make a routine fetch a single file but to fetch it correctly 
-// and we need to return a structure with
-// isFile // we may have folders that we fetch from our server
-// name, fileExtension and relative path of the file 
-// fileContent
