@@ -53,7 +53,7 @@ void fileFetcher(struct enod* ENOD) {
     // then we treat it separately
 
     parseURL(ENOD->url, host, path, &port);
-    printf("domain : %s path : %s port : %d \n", host, path, port);
+    // printf("domain : %s path : %s port : %d \n", host, path, port);
     while (1) {
         sprintf(buffer, "GET /%s HTTP/1.1\r\nHost: %s:%d\r\n\r\n", path, host, port);
         // fgets(buffer, BUFFER_SIZE, stdin);
@@ -64,7 +64,7 @@ void fileFetcher(struct enod* ENOD) {
 
         // Receiving a response from the server
         if (read(sock, buffer, BUFFER_SIZE) == 0) {
-            printf("Server closed the connection\n");
+            // printf("Server closed the connection\n");
             break;
         }
         // printf("Server response: %s\n", buffer);
