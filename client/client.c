@@ -1,3 +1,5 @@
+// we need to remove all the logic for the https kind of functions
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -58,6 +60,28 @@ void createDirectoryIfNotExists(const char *path)
         mkdir(path, 0777);
     }
 }
+
+// int doesURlPointToFolder(const char *url) {
+//     int length = strlen(url);
+
+//     // URL ending with / is likely a directory
+//     if (url[length - 1] == '/') {
+//         return 1;
+//     }
+
+//     // Check for a period in the last part of the URL
+//     for (int i = length - 1; i >= 0; i--) {
+//         if (url[i] == '/') {
+//             break;
+//         }
+//         if (url[i] == '.') {
+//             return 0;
+//         }
+//     }
+
+//     // If no period found, it's likely a directory
+//     return 1;
+// }
 
 void createFileOrFolder(struct enod *node)
 {
@@ -199,13 +223,12 @@ void fetchFileAndContinueDown(struct enod *ENOD, int maxDepth)
         return;
 
     fileFetcher(ENOD);
-    // printf("the fetched file url is %s is a %d and the content is: \n %s \n", ENOD->url, ENOD->isFile, ENOD->fileContent);
+    printf("the fetched file url is %s is a %d and the content is: \n %s \n", ENOD->url, ENOD->isFile, ENOD->fileContent);
     if (isFileNotFound(ENOD)) // no cotent to use further
     {
         printf("the file is not found\n");
         return;
     }
-    printf("going to create the file \n");
     createFileOrFolder(ENOD);
     // now we have the following cases
     // if it is a folder create a folder and launche a file fetch for each of the files inside (we know them fromt he file content)
@@ -300,6 +323,15 @@ int main(int argc, char *argv[])
     // clear the folder for the files to come
     executeCommand("rm", "rm -R download");
     executeCommand("mkdir", "mkdir download");
+    // if (strstr(argv[1], "localhost:8080") == NULL && doesURlPointToFolder(argv[1]) == 1)
+    // {
+    //     if (argv[1][strlen(argv[1]) - 1] == '/')
+    //         strcat(argv[1], "index.html");
+    //     else
+    //         strcat(argv[1], "/index.html");
+
+    // }
+
     /// now we are sure this is cleaned up
     struct enod rootENOD;
     rootENOD.id = globalENODId++;
@@ -310,8 +342,13 @@ int main(int argc, char *argv[])
     char host[100] = {0};
     char path[200] = {0};
     int port;
+    // we need to check if the url is not a localhost:8080 one then we add a index.html at the end of the url
+    printf("the url is %s\n", argv[1]);
     parseURL1(argv[1], host, path, &port);
-    sprintf(rootENOD.baseUrl, "http://%s:%d", host, port);
+    // if (port != 80)
+        sprintf(rootENOD.baseUrl, "http://%s:%d", host, port);
+    // else
+        // sprintf(rootENOD.baseUrl, "http://%s", host);
     printf("%s\n", rootENOD.baseUrl);
     fetchFileAndContinueDown(&rootENOD, depth);
 

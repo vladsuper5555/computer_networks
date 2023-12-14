@@ -8,14 +8,61 @@
 #include "fileFetcher.h"
 
 #define PORT 8080
-#define BUFFER_SIZE 10 * 1024
+#define BUFFER_SIZE 100 * 1024
+
+
+// int doesURlPointToFolder(const char *url) {
+//     int length = strlen(url);
+
+//     // URL ending with / is likely a directory
+//     if (url[length - 1] == '/') {
+//         return 1;
+//     }
+
+//     // Check for a period in the last part of the URL
+//     for (int i = length - 1; i >= 0; i--) {
+//         if (url[i] == '/') {
+//             break;
+//         }
+//         if (url[i] == '.') {
+//             return 0;
+//         }
+//     }
+
+//     // If no period found, it's likely a directory
+//     return 1;
+// }
+
+int doesURlPointToFolder(const char *url) {
+    // Check if URL ends with '/'
+    int len = strlen(url);
+    if (url[len - 1] == '/') {
+        return 1;
+    }
+
+    // Check for presence of a file extension
+    // If the last segment after the last '/' contains a '.', it's likely a file
+    const char *lastSlash = strrchr(url + 7, '/'); // skipping http://
+    if (lastSlash != NULL) {
+        if (strchr(lastSlash, '.') != NULL) {
+            return 0;
+        }
+    } else {
+        // If no slashes after 'http://', it's likely a folder
+        if (strncmp(url, "http://", 7) == 0 || strncmp(url, "https://", 8) == 0) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 void parseURL(const char *url, char *host, char *path, int *port) {
     *port = 80; // Default HTTP port
     // Assuming the URL format is http://[host]:[port]/[path]
     sscanf(url, "http://%99[^:/]:%i/%199[^\n]", host, port, path);
     if (strlen(path) == 0) {
-        strcpy(path, "/");
+        strcpy(path, "");
     }
 }
 
@@ -55,9 +102,13 @@ void fileFetcher(struct enod* ENOD) {
     parseURL(ENOD->url, host, path, &port);
     // printf("domain : %s path : %s port : %d \n", host, path, port);
     while (1) {
-        sprintf(buffer, "GET /%s HTTP/1.1\r\nHost: %s:%d\r\n\r\n", path, host, port);
+        // if the port is 80 dont put it int he url
+        // if (port != 80)
+            sprintf(buffer, "GET /%s HTTP/1.1\r\nHost: %s:%d\r\n\r\n", path, host, port);
+        // else
+            // sprintf(buffer, "GET /%s HTTP/1.1\r\nHost: %s\r\n\r\n", path, host);
         // fgets(buffer, BUFFER_SIZE, stdin);
-        // printf("the buffer is %s\n", buffer);
+        printf("the buffer is %s\n", buffer);
         // Sending a message to the server
         send(sock, buffer, strlen(buffer), 0);
         memset(buffer, 0, BUFFER_SIZE); // Clear the buffer
@@ -77,6 +128,17 @@ void fileFetcher(struct enod* ENOD) {
             ENOD->isFile = 0;
         else
             ENOD->isFile = 1;
+        // if it is a file but does not end with a file and is not localhost:8080 then add index.html at
+        // the end of the string
+        if (strstr(ENOD->url, "localhost:8080") == NULL && doesURlPointToFolder(ENOD->url) == 1)
+        {
+            int len = strlen(ENOD->url);
+            if (ENOD->url[len - 1] == '/')
+                strcat(ENOD->url, "index.html");
+            else
+                strcat(ENOD->url, "/index.html");
+        }
+
     }
 
     close(sock);

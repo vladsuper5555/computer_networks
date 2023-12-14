@@ -7,6 +7,6 @@ struct enod
     char localPath[1024]; // this is the locatuon in the download folder of the file
     char url[1024]; // this is the location for the fetch
     char baseUrl[1024]; // so that we can deduce the path of the actual file
-    char fileContent[10 * 1024]; // in fetch
+    char fileContent[100 * 1024]; // in fetch
 };
 void fileFetcher(struct enod* ENOD);
