@@ -38,35 +38,14 @@ int isLocalhost(const char* url) {
 
 
 int main(int argc, char *argv[]) {
-    
-    const char* testUrls[] = {
-        "http://localhost",
-        "https://localhost",
-        "http://localhost:8080",
-        "https://127.0.0.1",
-        "http://192.168.1.1", // This is a common local network IP
-        "http://192.168.0.105",
-        "http://example.com"
-    };
+    char result[1000001];
+    for (int i = 0; i < 1000000; ++i)
+        result[i] = '\0';
+    // check the args first time
+    returnFilesContent(argv[1], result);
 
-    for (int i = 0; i < sizeof(testUrls)/sizeof(testUrls[0]); i++) {
-        if (isLocalhost(testUrls[i])) {
-            printf("URL '%s' is for localhost.\n", testUrls[i]);
-        } else {
-            printf("URL '%s' is not for localhost.\n", testUrls[i]);
-        }
-    }
-
-    return 0;
-    // char result[10000];
-    // for (int i = 0; i < 10000; ++i)
-    //     result[i] = '\0';
-    // // check the args first time
-    // returnFilesContent(argv[1], result);
-
-    // const char *root = "root";
-    // executeCommand(argv[0], "ls -l");
-    // printf("the final lenfth is %d \n", strlen(result));
-    // printf("%s\n", result);
+    executeCommand(argv[0], "ls -l");
+    printf("the final lenfth is %d \n", strlen(result));
+    printf("%s\n", result);
     return 0;
 }

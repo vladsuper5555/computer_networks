@@ -154,38 +154,9 @@ void build_http_response(const char *file_name,
     close(file_fd);
 }
 
-bool is_remote_request(char *host)
+bool is_remote_request(const char *file_name)
 {
-    char *p = strstr(host, "localhost:8080");
-    return p == NULL;
-}
-
-void extract_url_from_request(const char *request, char *url) {
-    char method[10], path[100], host[100], port[6] = ""; // Default port is 80
-    int is_port_specified = 0;
-
-    // Parse the request line
-    sscanf(request, "%s %s", method, path);
-
-    // Search for the Host header
-    const char *host_start = strstr(request, "Host: ");
-    if (host_start != NULL) {
-        sscanf(host_start, "Host: %[^:]:%s", host, port);
-        is_port_specified = strlen(port) != 0;
-        if (!is_port_specified)
-            strcpy(port, "80");
-    }
-    else
-    {
-        strcpy(host, "Unknown"); // Fallback if Host is not found
-    }
-
-    // Construct the URL
-    if (!is_port_specified) {
-        sprintf(url, "http://%s%s", host, path);
-    } else {
-        sprintf(url, "http://%s:%s%s", host, port, path);
-    }
+    return (strncmp(file_name, "http://", 7) == 0) || (strncmp(file_name, "https://", 8) == 0);
 }
 
 bool is_directory_request(const char *file_name)
@@ -233,6 +204,7 @@ char *list_directory_contents(const char *directory)
 
 void *handle_client(void *arg)
 {
+    printf("created a new thread for the executiong of this thing");
     int client_fd = *((int *)arg);
     char *buffer = (char *)malloc(BUFFER_SIZE * sizeof(char));
 
@@ -245,25 +217,21 @@ void *handle_client(void *arg)
         regex_t regex;
         regcomp(&regex, "^GET /([^ ]*) HTTP/1.1", REG_EXTENDED);
         regmatch_t matches[2];
-        int isRemoteRequest = is_remote_request(buffer);
-        char bufferCopy[100001];
-        strcpy(bufferCopy, buffer);
+
         if (regexec(&regex, buffer, 2, matches, 0) == 0 || true)
         {
             // extract filename from request and decode URL
             buffer[matches[1].rm_eo] = '\0';
-            char *url_encoded_file_name = buffer + matches[1].rm_so;
+            const char *url_encoded_file_name = buffer + matches[1].rm_so;
             char *file_name = url_decode(url_encoded_file_name);
+            printf("the name of the file first read is %s", file_name);
             // Determine if the request is local or remote
-            if (isRemoteRequest)
+            if (is_remote_request(file_name))
             {
                 printf("we received a request for a remote file\n");
                 char remote_content[100001];
-                // returnFilesContent(file_name, remote_content);
-                char urlToRequest[1000];
-                extract_url_from_request(bufferCopy, urlToRequest);
-                printf("the request url we are going to use is %s", urlToRequest);  
-                returnFilesContent(urlToRequest, remote_content);
+                returnFilesContent(file_name, remote_content);
+
                 // send remote_content as response
                 send(client_fd, remote_content, strlen(remote_content), 0);
                 // free(remote_content);

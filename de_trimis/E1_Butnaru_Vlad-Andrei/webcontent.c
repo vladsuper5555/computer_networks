@@ -12,12 +12,11 @@ void extractProtocol(char *url, char *protocol)
     }
 }
 
-void extractDomain(char *url, char *domain)
-{
+void extractDomain(char *url, char *domain) {
     char *start = strstr(url, "://");
     if (start == NULL)
         start = url;
-    else
+    else 
         start += 3;
 
     char *end = strchr(start, '/');
@@ -27,12 +26,12 @@ void extractDomain(char *url, char *domain)
 
     if (end == NULL)
         strcpy(domain, start);
-    else
-    {
+    else {
         strncpy(domain, start, end - start);
         domain[end - start] = '\0';
     }
 }
+
 
 void extractPath(char *url, char *path)
 {
@@ -75,31 +74,6 @@ void extractPort(char *url, char *protocol, char *port)
         strcpy(port, strcmp(protocol, "https") == 0 ? "443" : "80");
 }
 
-int isspace(int ch)
-{
-    return (ch == ' ') || (ch == '\f') || (ch == '\n') ||
-           (ch == '\r') || (ch == '\t') || (ch == '\v');
-}
-
-void stripTrailingWhiteSpace(char *str)
-{
-    if (str == NULL)
-    {
-        return;
-    }
-
-    int len = strlen(str);
-
-    // Start from the end of the string and move backwards
-    while (len > 0 && isspace((unsigned char)str[len - 1]))
-    {
-        len--;
-    }
-
-    // Null-terminate the string at the new end
-    str[len] = '\0';
-}
-
 void returnFilesContent(char *url, char *result)
 {
     struct addrinfo hints, *res;
@@ -114,8 +88,6 @@ void returnFilesContent(char *url, char *result)
     extractDomain(url, domain);
     extractPath(url, path);
     extractPort(url, protocol, port);
-    stripTrailingWhiteSpace(domain);
-    stripTrailingWhiteSpace(path);
     // const char *port = strcmp(protocol, "https") == 0 ? "443" : "80";
 
     printf("the protocol is %s \n", protocol);
@@ -143,11 +115,10 @@ void returnFilesContent(char *url, char *result)
     }
 
     char header[5128];
-    // if (strcmp(port, "80") != 0 && strcmp(port, "443") != 0)
-    sprintf(header, "GET %s HTTP/1.1\r\nHost: %s:%s\r\n\r\n", path, domain, port); // if it is a special port
-                                                                                   // else
-    // sprintf(header, "GET %s HTTP/1.1\r\nHost: %s\r\n\r\n", path, domain); // here not
-    printf("the request that we made is %s", header);
+    if (strcmp(port, "80") != 0 && strcmp(port, "443") != 0)
+        sprintf(header, "GET %s HTTP/1.1\r\nHost: %s:%s\r\n\r\n", path, domain, port); // if it is a special port
+    else
+        sprintf(header, "GET %s HTTP/1.1\r\nHost: %s\r\n\r\n", path, domain); // here not
     send(sockfd, header, strlen(header), 0);
 
     int headers_finished = 0;
@@ -157,7 +128,7 @@ void returnFilesContent(char *url, char *result)
         if (byte_count <= 0)
             break;
 
-        buf[byte_count] = '\0';
+        buf[byte_count] = '\0'; 
 
         if (!headers_finished)
         {
