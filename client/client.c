@@ -1,5 +1,6 @@
 // we need to remove all the logic for the https kind of functions
-
+// bug when requesting the http://localhost:8081/table-localhost 
+// probably fromt he part where we try to add the index.html to the final urls
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

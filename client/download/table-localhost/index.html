@@ -1,0 +1,89 @@
+HTTP/1.1 200 OK
+Host: localhost:8081
+Date: Thu, 14 Dec 2023 21:18:08 GMT
+Connection: close
+Content-Type: text/html; charset=UTF-8
+Content-Length: 2818
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table</title>
+    <script type="application/ld+json" id="tabgram">
+        {
+            "@context": "https://www.tabgram.net/schemas/tgSociety/communication/standardMessage",
+            "schemaVersion": 0,
+            "@type": "WebApplication",
+            "@id": "http://www.tabgram.net/apps/basic/type3",
+            "url": "http://tabgram.localhost/domainfilter",
+            "name": "serializeTestApp",
+            "releaseNotes": "first version",
+            "abstract": "this shows a some buttons and effects",
+            "softwareRequirements": "needs http://www.tabgram.com/desktop and a Chromium based browser (like Chrome, Edge, Opera,..) installed",
+            "permissions": [],
+            "featureList": [   
+              {
+                "domain" : {
+                  "name": "BrowserExtension"
+                },
+                "api" : "tabs",
+                "method": "focusTab"
+              },        
+              {
+                "domain": {
+                  "name": "tabgram"
+                },
+                "api": "browsersTabsStatus",
+                "events": [
+                  "onUpdated", "onExisting"
+                ],
+                "params": null
+              },              {
+                "domain": {
+                  "name": "tabgram"
+                },
+                "api": "tabsFavicons",
+                "events": [
+                  "onCaptured", "onExisting"
+                ],
+                "params": null
+              },
+              {
+                "domain": {
+                  "name": "tabgram"
+                },
+                "api": "pipeCommunication",
+                "events": [
+                  "onAskAction"
+                ],
+                "params": {
+                  "specifications": [
+                    {
+                      "input": {
+                        "$schema": "http://json-schema.org/schema#",
+                        "$id": "http://tabgram.com/schemas/communication/example/json/anything"
+                      },
+                      "output": {
+                        "$schema": "http://json-schema.org/schema#",
+                        "$id": "http://tabgram.com/schemas/communication/example/json/tabList"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "supportingData": {},
+            "providingData": {}
+          }
+    </script>
+    <script src="./tabgramCustomConfig.js"></script>
+    <script src="./tgLib.js" defer></script>
+    <script src="./tgUtils.js" defer></script>
+    <script src="./index.js" defer></script>
+</head>
+<body>
+  <h1>Table</h1>
+</body>
+</html>

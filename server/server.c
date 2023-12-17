@@ -15,6 +15,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include "../webcontent.h"
+// implement the feching of bytes because images cant be rendered from the server
 
 #define PORT 8080
 #define BUFFER_SIZE 104857600
